@@ -5,6 +5,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  Image,
 } from "react-native";
 
 const Login = ({ navigation }) => {
@@ -13,7 +14,8 @@ const Login = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Yol Arkadaşım</Text>
+      <Image style={styles.logo} source={require("../assets/logo.png")} />
+      <Text style={styles.logoText}>Yol Arkadaşım</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.inputText}
@@ -52,9 +54,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logo: {
+  logo: { width: 100, height: 100 },
+  logoText: {
     fontWeight: "bold",
-    fontSize: 50,
+    fontSize: 25,
     color: "white",
     marginBottom: 40,
   },

@@ -5,16 +5,19 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  Image,
 } from "react-native";
 
 const Register = ({ navigation }) => {
   const [email, setEmail] = React.useState();
+  const [displayName, setDisplayName] = React.useState();
   const [password, setPassword] = React.useState();
   const [confirmPassword, setConfirmPassword] = React.useState();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Yol Arkadaşım</Text>
+      <Image style={styles.logo} source={require("../assets/logo.png")} />
+      <Text style={styles.logoText}>Yol Arkadaşım</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.inputText}
@@ -22,6 +25,15 @@ const Register = ({ navigation }) => {
           placeholderTextColor="white"
           value={email}
           onChangeText={(text) => setEmail(text)}
+        />
+      </View>
+      <View style={styles.inputView}>
+        <TextInput
+          style={styles.inputText}
+          placeholder="Display Name..."
+          placeholderTextColor="white"
+          value={displayName}
+          onChangeText={(text) => setDisplayName(text)}
         />
       </View>
       <View style={styles.inputView}>
@@ -63,9 +75,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logo: {
+  logo: { width: 100, height: 100 },
+  logoText: {
     fontWeight: "bold",
-    fontSize: 50,
+    fontSize: 25,
     color: "white",
     marginBottom: 40,
   },
