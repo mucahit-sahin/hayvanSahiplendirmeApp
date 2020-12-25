@@ -7,12 +7,53 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { firebase } from "../firebase/config";
 
 const Register = ({ navigation }) => {
-  const [email, setEmail] = React.useState();
-  const [displayName, setDisplayName] = React.useState();
-  const [password, setPassword] = React.useState();
-  const [confirmPassword, setConfirmPassword] = React.useState();
+  const [email, setEmail] = React.useState("");
+  const [fullName, setFullName] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  const onRegisterPress = () => {
+    if (
+      !email.trim() &&
+      !fullName.trim() &&
+      !password.trim() &&
+      !confirmPassword.trim()
+    ) {
+      alert("Lütfen alanları boş bırakmayın");
+      return;
+    }
+    if (password !== confirmPassword) {
+      alert("Parolalar eşlenmiyor");
+      return;
+    }
+
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const data = {
+          id: uid,
+          email,
+          fullName,
+        };
+        const usersRef = firebase.firestore().collection("users");
+        usersRef
+          .doc(uid)
+          .set(data)
+          .then(() => {
+            navigation.navigate("Home", { user: data });
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
 
   return (
     <View style={styles.container}>
@@ -30,10 +71,10 @@ const Register = ({ navigation }) => {
       <View style={styles.inputView}>
         <TextInput
           style={styles.inputText}
-          placeholder="Display Name..."
+          placeholder="Full Name..."
           placeholderTextColor="white"
-          value={displayName}
-          onChangeText={(text) => setDisplayName(text)}
+          value={fullName}
+          onChangeText={(text) => setFullName(text)}
         />
       </View>
       <View style={styles.inputView}>
@@ -56,7 +97,10 @@ const Register = ({ navigation }) => {
           onChangeText={(text) => setConfirmPassword(text)}
         />
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity
+        style={styles.loginBtn}
+        onPress={() => onRegisterPress()}
+      >
         <Text style={styles.loginText}>SIGNUP</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Login")}>
