@@ -7,11 +7,41 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { firebase } from "../firebase/config";
 
 const Login = ({ navigation }) => {
-  const [email, setEmail] = React.useState();
-  const [password, setPassword] = React.useState();
-
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const onLoginPress = () => {
+    if (!email.trim() && !password.trim()) {
+      alert("Lütfen alanları boş bırakmayın");
+      return;
+    }
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .then((response) => {
+        const uid = response.user.uid;
+        const usersRef = firebase.firestore().collection("users");
+        usersRef
+          .doc(uid)
+          .get()
+          .then((firestoreDocument) => {
+            if (!firestoreDocument.exists) {
+              alert("Mail ve şifreyi tekrar kontrol ediniz!");
+              return;
+            }
+            const user = firestoreDocument.data();
+            navigation.navigate("Home", { user: user });
+          })
+          .catch((error) => {
+            alert(error);
+          });
+      })
+      .catch((error) => {
+        alert(error);
+      });
+  };
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/logo.png")} />
@@ -35,7 +65,7 @@ const Login = ({ navigation }) => {
           onChangeText={(text) => setPassword(text)}
         />
       </View>
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity style={styles.loginBtn} onPress={() => onLoginPress()}>
         <Text style={styles.loginText}>LOGIN</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("Signup")}>
