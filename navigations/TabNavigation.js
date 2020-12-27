@@ -5,6 +5,7 @@ import Home from "../screens/Home";
 import Profile from "../screens/Profile";
 import HomeIcon from "../components/Home";
 import ProfileIcon from "../components/User";
+import DrawerNavigation from "./DrawerNavigation";
 
 const Tab = createBottomTabNavigator();
 
@@ -24,7 +25,7 @@ export default function TabNavigation() {
         />
         <Tab.Screen
           name="Profile"
-          component={Profile}
+          component={DrawerNavigation}
           options={{
             tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
