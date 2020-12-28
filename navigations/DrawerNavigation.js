@@ -6,6 +6,7 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import Profile from "../screens/Profile";
+import LogoutIcon from "../components/icons/Logout";
 
 const Drawer = createDrawerNavigator();
 
@@ -18,7 +19,11 @@ const DrawerNavigation = ({ user, logOut }) => {
         return (
           <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
-            <DrawerItem label="Çıkış Yap" onPress={() => logOut()} />
+            <DrawerItem
+              label="Çıkış Yap"
+              onPress={() => logOut()}
+              icon={LogoutIcon}
+            />
           </DrawerContentScrollView>
         );
       }}
