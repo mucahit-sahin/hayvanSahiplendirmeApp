@@ -6,13 +6,26 @@ import {
   DrawerItemList,
 } from "@react-navigation/drawer";
 import Profile from "../screens/Profile";
-import { firebase } from "../firebase/config";
 
 const Drawer = createDrawerNavigator();
-const DrawerNavigation = ({ signOut }) => {
+
+const DrawerNavigation = ({ user, logOut }) => {
   return (
-    <Drawer.Navigator initialRouteName="Profile" drawerPosition="right">
-      <Drawer.Screen name="Profile" component={Profile} />
+    <Drawer.Navigator
+      initialRouteName="Profile"
+      drawerPosition="right"
+      drawerContent={(props) => {
+        return (
+          <DrawerContentScrollView {...props}>
+            <DrawerItemList {...props} />
+            <DrawerItem label="Çıkış Yap" onPress={() => logOut()} />
+          </DrawerContentScrollView>
+        );
+      }}
+    >
+      <Drawer.Screen name="Profile">
+        {(props) => <Profile {...props} extraData={user} />}
+      </Drawer.Screen>
     </Drawer.Navigator>
   );
 };

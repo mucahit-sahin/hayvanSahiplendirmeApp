@@ -26,11 +26,23 @@ const Routes = () => {
       }
     });
   }, []);
+  const logOut = () => {
+    firebase.auth().signOut();
+    setUser();
+  };
 
   if (loading) {
     return <></>;
   }
-  return <>{user ? <TabNavigation /> : <AuthNavigation />}</>;
+  return (
+    <>
+      {user ? (
+        <TabNavigation user={user} logOut={logOut} />
+      ) : (
+        <AuthNavigation />
+      )}
+    </>
+  );
 };
 
 export default Routes;
