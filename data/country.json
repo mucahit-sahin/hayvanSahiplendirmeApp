@@ -1,0 +1,14 @@
+[  
+    {"name":"Ulke seçiniz","code":"tr"}, 
+    {"name":"Türkiye","code":"tr"}, 
+    {"name":"Birleşik Arap Emirlikleri","code":"ae"},    
+    {"name":"Arjantin","code":"ar"},
+    {"name":"Avusturya","code":"at"},
+    {"name":"Avustralya","code":"au"},
+    {"name":"Belçika","code":"be"},
+    {"name":"Bulgaristan","code":"bg"},
+    {"name":"Brezilya","code":"br"},
+    {"name":"Kanada","code":"ca"},
+    {"name":"İsviçre","code":"ch"},
+    {"name":"Çin","code":"cn"}
+]
