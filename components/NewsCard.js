@@ -1,23 +1,8 @@
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
+import { convertMS } from "../utils/convertMS";
 
 const NewsCard = ({ data }) => {
-  function convertMS(milliseconds) {
-    var day, hour, minute, seconds;
-    seconds = Math.floor(milliseconds / 1000);
-    minute = Math.floor(seconds / 60);
-    seconds = seconds % 60;
-    hour = Math.floor(minute / 60);
-    minute = minute % 60;
-    day = Math.floor(hour / 24);
-    hour = hour % 24;
-    return {
-      day: day,
-      hour: hour,
-      minute: minute,
-      seconds: seconds,
-    };
-  }
   return (
     <View style={styles.container}>
       <View style={styles.newsSite}>
