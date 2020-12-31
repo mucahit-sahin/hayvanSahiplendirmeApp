@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  ActivityIndicator,
   RefreshControl,
   ScrollView,
   StyleSheet,
@@ -12,18 +11,18 @@ import {
 } from "react-native";
 import NewsCard from "../components/NewsCard";
 import api from "../services/api";
-import countryList from "../country.json";
-import categoryList from "../category.json";
+import countryList from "../data/country.json";
+import categoryList from "../data/category.json";
 
 const API_KEY = "f837f9fbc3714d709677a8b923bb34ed";
 
-const Home = (props) => {
-  const userID = props.extraData.id;
+const Home = ({ navigation }) => {
   const [newsList, setNewsList] = React.useState([]);
   const [refresh, setRefresh] = React.useState(false);
   const [isFilter, setIsFilter] = React.useState(false);
   const [country, setCountry] = React.useState("Türkiye");
   const [selectedCountry, setSelectedCountry] = React.useState("Türkiye");
+  const [selectedCountryCode, setSelectedCountryCode] = React.useState("tr");
   const [selectedCategory, setSelectedCategory] = React.useState("general");
 
   React.useEffect(() => {
@@ -38,7 +37,7 @@ const Home = (props) => {
     setNewsList([]);
     await api
       .get(
-        `top-headlines?country=${selectedCountry}&category=${selectedCategory}&apiKey=${API_KEY}`
+        `top-headlines?country=${selectedCountryCode}&category=${selectedCategory}&apiKey=${API_KEY}`
       )
       .then((response) => {
         setNewsList(response.data.articles);
@@ -49,7 +48,7 @@ const Home = (props) => {
     setCountry(selectedCountry);
     countryList.map((country) => {
       if (country.name == selectedCountry) {
-        setSelectedCountry(country.code);
+        setSelectedCountryCode(country.code);
       }
     });
   };
@@ -70,11 +69,12 @@ const Home = (props) => {
             }
           >
             {newsList.map((news) => (
-              <NewsCard data={news} />
+              <NewsCard data={news} navigation={navigation} />
             ))}
           </ScrollView>
         </View>
       )}
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -158,9 +158,12 @@ const styles = StyleSheet.create({
     flex: 0.1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#d7d7d8",
+    backgroundColor: "white",
     borderBottomStartRadius: 30,
     borderBottomEndRadius: 30,
+    borderBottomWidth: 1,
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
   },
   newsList: {
     flex: 0.9,
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
   changeButton: {
     flex: 1,
     alignItems: "center",
-    backgroundColor: "green",
+    backgroundColor: "#00bce4",
     borderRadius: 15,
     padding: 5,
   },
