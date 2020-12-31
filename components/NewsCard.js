@@ -1,8 +1,22 @@
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Alert, Image, StyleSheet, Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { firebase } from "../firebase/config";
 import { convertMS } from "../utils/convertMS";
 
-const NewsCard = ({ data }) => {
+const NewsCard = ({ data, navigation, save }) => {
+  const user = firebase.auth().currentUser;
+  const regex = /\./gi;
+
+  const saveNews = () => {
+    var name = data.source.name;
+    name = name.replace(regex, "-");
+    firebase
+      .database()
+      .ref(`users/${user.uid}/savedNews/${name + data.publishedAt}`)
+      .set(data);
+    Alert.alert("Başarılı", "Haber başarılı bir şekilde kaydedildi");
+  };
   return (
     <View style={styles.container}>
       <View style={styles.newsSite}>
@@ -29,6 +43,39 @@ const NewsCard = ({ data }) => {
       <View style={styles.newsDescription}>
         <Text>{data.description}</Text>
       </View>
+
+      {save ? (
+        <View
+          style={{
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "white",
+            padding: 5,
+            borderRadius: 10,
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => navigation.navigate("Details", { link: data.url })}
+          >
+            <Text>Siteye git</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={{ flexDirection: "row" }}>
+          <View style={styles.button}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate("Details", { link: data.url })}
+            >
+              <Text>Siteye Git</Text>
+            </TouchableOpacity>
+          </View>
+          <View style={styles.button}>
+            <TouchableOpacity onPress={() => saveNews()}>
+              <Text>Kaydet</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
@@ -53,4 +100,13 @@ const styles = StyleSheet.create({
   },
   newsTitle: { flexDirection: "row", padding: 5 },
   newsDescription: { flexDirection: "row", padding: 5 },
+  button: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    borderRadius: 10,
+    flex: 0.5,
+    paddingVertical: 5,
+    marginHorizontal: 5,
+  },
 });
