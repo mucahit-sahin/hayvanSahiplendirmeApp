@@ -2,9 +2,10 @@ import * as React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Home from "../screens/Home";
-import HomeIcon from "../components/Home";
-import ProfileIcon from "../components/User";
+import HomeIcon from "../components/icons/Home";
 import DrawerNavigation from "./DrawerNavigation";
+import ProfileIcon from "../components/icons/User";
+import HomeStack from "./HomeStack";
 
 const Tab = createBottomTabNavigator();
 
@@ -14,15 +15,14 @@ export default function TabNavigation({ user, logOut }) {
       <Tab.Navigator>
         <Tab.Screen
           name="Home"
+          component={HomeStack}
           options={{
             tabBarLabel: "",
             tabBarIcon: ({ color, size }) => (
               <HomeIcon name="Home" color={color} size={size} />
             ),
           }}
-        >
-          {(props) => <Home {...props} extraData={user} />}
-        </Tab.Screen>
+        />
         <Tab.Screen
           name="Profile"
           options={{

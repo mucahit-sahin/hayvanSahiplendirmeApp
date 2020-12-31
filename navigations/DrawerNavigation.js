@@ -5,7 +5,7 @@ import {
   DrawerItem,
   DrawerItemList,
 } from "@react-navigation/drawer";
-import Profile from "../screens/Profile";
+import ProfileStack from "../navigations/ProfileStack";
 import LogoutIcon from "../components/icons/Logout";
 
 const Drawer = createDrawerNavigator();
@@ -29,7 +29,7 @@ const DrawerNavigation = ({ user, logOut }) => {
       }}
     >
       <Drawer.Screen name="Profile">
-        {(props) => <Profile {...props} extraData={user} />}
+        {(props) => <ProfileStack {...props} extraData={user} />}
       </Drawer.Screen>
     </Drawer.Navigator>
   );
