@@ -8,34 +8,35 @@ import {
   Image,
 } from "react-native";
 import { firebase } from "../firebase/config";
+import * as Notifications from "expo-notifications";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const onLoginPress = () => {
+  const onLoginPress = async () => {
     if (!email.trim() && !password.trim()) {
       alert("Lütfen alanları boş bırakmayın");
       return;
     }
+    const createToken = await Notifications.getExpoPushTokenAsync();
     firebase
       .auth()
       .signInWithEmailAndPassword(email, password)
       .then((response) => {
         const uid = response.user.uid;
-        const usersRef = firebase.firestore().collection("users");
-        usersRef
-          .doc(uid)
-          .get()
-          .then((firestoreDocument) => {
-            if (!firestoreDocument.exists) {
-              alert("Mail ve şifreyi tekrar kontrol ediniz!");
-              return;
+        firebase
+          .database()
+          .ref(`/users/${uid}`)
+          .on("value", (snapshot) => {
+            if (snapshot.val()) {
+              firebase
+                .database()
+                .ref(`users/${uid}`)
+                .update({
+                  expoToken: createToken.data,
+                })
+                .then(() => console.log("Data updated."));
             }
-            const user = firestoreDocument.data();
-            navigation.navigate("Home", { user: user });
-          })
-          .catch((error) => {
-            alert(error);
           });
       })
       .catch((error) => {
@@ -45,7 +46,6 @@ const Login = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/logo.png")} />
-      <Text style={styles.logoText}>Yol Arkadaşım</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.inputText}
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logo: { width: 100, height: 100 },
+  logo: { width: 100, height: 100, marginBottom: 10 },
   logoText: {
     fontWeight: "bold",
     fontSize: 25,
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: 10,
     marginBottom: 10,
   },
   loginText: {

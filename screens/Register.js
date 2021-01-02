@@ -6,7 +6,9 @@ import {
   View,
   TouchableOpacity,
   Image,
+  Alert,
 } from "react-native";
+import * as Notifications from "expo-notifications";
 import { firebase } from "../firebase/config";
 
 const Register = ({ navigation }) => {
@@ -14,7 +16,8 @@ const Register = ({ navigation }) => {
   const [fullName, setFullName] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const onRegisterPress = () => {
+
+  const onRegisterPress = async () => {
     if (
       !email.trim() &&
       !fullName.trim() &&
@@ -28,7 +31,9 @@ const Register = ({ navigation }) => {
       alert("Parolalar eşlenmiyor");
       return;
     }
+    const createToken = await Notifications.getExpoPushTokenAsync();
 
+    console.log(createToken);
     firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
@@ -36,19 +41,11 @@ const Register = ({ navigation }) => {
         const uid = response.user.uid;
         const data = {
           id: uid,
-          email,
-          fullName,
+          email: email,
+          fullName: fullName,
+          expoToken: createToken.data,
         };
-        const usersRef = firebase.firestore().collection("users");
-        usersRef
-          .doc(uid)
-          .set(data)
-          .then(() => {
-            navigation.navigate("Home", { user: data });
-          })
-          .catch((error) => {
-            alert(error);
-          });
+        firebase.database().ref(`users/${uid}`).set(data);
       })
       .catch((error) => {
         alert(error);
@@ -58,7 +55,6 @@ const Register = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image style={styles.logo} source={require("../assets/logo.png")} />
-      <Text style={styles.logoText}>Yol Arkadaşım</Text>
       <View style={styles.inputView}>
         <TextInput
           style={styles.inputText}
@@ -119,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  logo: { width: 100, height: 100 },
+  logo: { width: 100, height: 100, marginBottom: 10 },
   logoText: {
     fontWeight: "bold",
     fontSize: 25,
@@ -146,7 +142,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: 10,
     marginBottom: 10,
   },
   loginText: {

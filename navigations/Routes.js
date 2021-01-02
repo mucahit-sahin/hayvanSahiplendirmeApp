@@ -1,25 +1,27 @@
 import React from "react";
 import { firebase } from "../firebase/config";
 import TabNavigation from "../navigations/TabNavigation";
+import Admin from "../screens/Admin";
 import AuthNavigation from "./AuthNavigation";
 const Routes = () => {
   const [loading, setLoading] = React.useState(true);
+
   const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
-    const usersRef = firebase.firestore().collection("users");
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
-        usersRef
-          .doc(user.uid)
-          .get()
-          .then((document) => {
-            const userData = document.data();
-            setLoading(false);
+        firebase
+          .database()
+          .ref(`/users/${user.uid}`)
+          .once("value", (snapshot) => {
+            const userData = snapshot.val();
             setUser(userData);
+            setLoading(false);
           })
           .catch((error) => {
             setLoading(false);
+            console.log(error);
           });
       } else {
         setLoading(false);
@@ -30,14 +32,17 @@ const Routes = () => {
     firebase.auth().signOut();
     setUser();
   };
-
   if (loading) {
     return <></>;
   }
   return (
     <>
       {user ? (
-        <TabNavigation user={user} logOut={logOut} />
+        user.email === "admin@gmail.com" ? (
+          <Admin logOut={logOut} />
+        ) : (
+          <TabNavigation user={user} logOut={logOut} />
+        )
       ) : (
         <AuthNavigation />
       )}
