@@ -20,7 +20,7 @@ const DrawerNavigation = ({ user, logOut }) => {
           <DrawerContentScrollView {...props}>
             <DrawerItemList {...props} />
             <DrawerItem
-              label="Çıkış Yap"
+              label="Logout"
               onPress={() => logOut()}
               icon={LogoutIcon}
             />

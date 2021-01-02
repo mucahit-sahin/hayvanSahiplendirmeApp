@@ -20,8 +20,8 @@ const Home = ({ navigation }) => {
   const [newsList, setNewsList] = React.useState([]);
   const [refresh, setRefresh] = React.useState(false);
   const [isFilter, setIsFilter] = React.useState(false);
-  const [country, setCountry] = React.useState("Türkiye");
-  const [selectedCountry, setSelectedCountry] = React.useState("Türkiye");
+  const [country, setCountry] = React.useState("Turkey");
+  const [selectedCountry, setSelectedCountry] = React.useState("Turkey");
   const [selectedCountryCode, setSelectedCountryCode] = React.useState("tr");
   const [selectedCategory, setSelectedCategory] = React.useState("general");
 
@@ -54,13 +54,11 @@ const Home = ({ navigation }) => {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => setIsFilter(true)}>
-          <Text style={{ fontSize: 20 }}>
-            {country} {selectedCategory} News
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.header} onPress={() => setIsFilter(true)}>
+        <Text style={{ fontSize: 20 }}>
+          {country} {selectedCategory} News
+        </Text>
+      </TouchableOpacity>
       {newsList && (
         <View style={styles.newsList}>
           <ScrollView
@@ -87,7 +85,7 @@ const Home = ({ navigation }) => {
           <View style={styles.modalView}>
             <View style={styles.formRow}>
               <View style={{ flex: 0.3 }}>
-                <Text style={styles.label}>Ülke:</Text>
+                <Text style={styles.label}>Country:</Text>
               </View>
               <View style={{ flex: 0.7 }}>
                 <Picker
@@ -137,7 +135,7 @@ const Home = ({ navigation }) => {
                   setIsFilter(false);
                 }}
               >
-                <Text>Degistir</Text>
+                <Text>Change</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -158,12 +156,9 @@ const styles = StyleSheet.create({
     flex: 0.1,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white",
+    backgroundColor: "#00bce4",
     borderBottomStartRadius: 30,
     borderBottomEndRadius: 30,
-    borderBottomWidth: 1,
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
   },
   newsList: {
     flex: 0.9,

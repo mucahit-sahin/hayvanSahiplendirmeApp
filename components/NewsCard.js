@@ -45,35 +45,30 @@ const NewsCard = ({ data, navigation, save }) => {
       </View>
 
       {save ? (
-        <View
+        <TouchableOpacity
           style={{
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: "white",
+            backgroundColor: "#00bce4",
             padding: 5,
             borderRadius: 10,
           }}
+          onPress={() => navigation.navigate("Details", { link: data.url })}
         >
+          <Text>Preview</Text>
+        </TouchableOpacity>
+      ) : (
+        <View>
           <TouchableOpacity
+            style={styles.button}
             onPress={() => navigation.navigate("Details", { link: data.url })}
           >
-            <Text>Siteye git</Text>
+            <Text>Preview</Text>
           </TouchableOpacity>
-        </View>
-      ) : (
-        <View style={{ flexDirection: "row" }}>
-          <View style={styles.button}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate("Details", { link: data.url })}
-            >
-              <Text>Siteye Git</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={styles.button}>
-            <TouchableOpacity onPress={() => saveNews()}>
-              <Text>Kaydet</Text>
-            </TouchableOpacity>
-          </View>
+
+          <TouchableOpacity style={styles.button} onPress={() => saveNews()}>
+            <Text>Save</Text>
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -101,12 +96,13 @@ const styles = StyleSheet.create({
   newsTitle: { flexDirection: "row", padding: 5 },
   newsDescription: { flexDirection: "row", padding: 5 },
   button: {
+    flex: 0.5,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "white",
+    backgroundColor: "#00bce4",
     borderRadius: 10,
-    flex: 0.5,
     paddingVertical: 5,
     marginHorizontal: 5,
+    marginBottom: 5,
   },
 });
