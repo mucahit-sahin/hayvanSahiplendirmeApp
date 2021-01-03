@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "hayvanSahiplendirmeApp",
-    "slug": "hayvanSahiplendirmeApp",
+    "name": "hotNewsApp",
+    "slug": "hotNewsApp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
